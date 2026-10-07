@@ -6,4 +6,5 @@ search-results { margin-top: 20px; }
 search-bar { display: flex; align-items: center; margin-bottom: 20px; background-color: #fff; padding: 10px; border-radius: 5px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); }
 links { display: flex; justify-content: space-between; margin-top: 20px; }
 clickable-link { color: #007BFF; text-decoration: none; }
-
+contact-form { display: flex; flex-direction: column; }
+github-link { display: block; margin-top: 20px; color: #007BFF; text-decoration: none; }
