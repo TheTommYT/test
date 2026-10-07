@@ -9,25 +9,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!query) return;
 
+            // Nettoyer les anciennes surbrillances
+            document.querySelectorAll('mark.search-highlight').forEach(mark => {
+                const parent = mark.parentNode;
+                parent.replaceChild(document.createTextNode(mark.textContent), mark);
+                parent.normalize();
+            });
+
             const elements = document.querySelectorAll('p, h1, h2, a');
-            let found = false;
+            let matchCount = 0;
+            let firstMatch = null;
 
-            for (let el of elements) {
-                if (el.textContent.toLowerCase().includes(query)) {
-                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    el.style.backgroundColor = '#38bdf8';
-                    el.style.color = '#0f172a';
-                    setTimeout(() => {
-                        el.style.backgroundColor = '';
-                        el.style.color = '';
-                    }, 2000);
-                    found = true;
-                    break;
+            elements.forEach(el => {
+                const text = el.textContent;
+                const lowerText = text.toLowerCase();
+                
+                if (lowerText.includes(query)) {
+                    matchCount++;
+                    
+                    // Remplacer le texte pour surligner tous les mots trouvés
+                    const regex = new RegExp(`(${query})`, 'gi');
+                    el.innerHTML = text.replace(regex, '<mark class="search-highlight" style="background-color: #38bdf8; color: #0f172a; padding: 0 2px;">$1</mark>');
+                    
+                    if (!firstMatch) {
+                        firstMatch = el;
+                    }
                 }
-            }
+            });
 
-            if (!found) {
-                alert("No matching word or section found for: " + query);
+            if (matchCount > 0) {
+                firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                alert(`Found ${matchCount} match(es) for: "${query}".`);
+            } else {
+                alert(`No results found for: "${query}".`);
             }
         });
     }
